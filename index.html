@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Time Card 24 Hours</title>
+<title>My 24 hours</title>
 <link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 :root{--bg:#FAF9F5;--card:#fff;--line:#E8E6DC;--ink:#141413;--mute:#6F6E68;--accent:#141413;
@@ -71,6 +71,12 @@ form h2{font-family:var(--serif);font-weight:400;font-size:22px;margin:0 0 12px}
 .saveRow input{flex:1;min-width:0}
 @media(max-width:480px){h1{font-size:32px}.card{grid-template-columns:auto 1fr auto;row-gap:6px}.dur{grid-column:2/4;justify-content:flex-start}.name{font-size:18px}}
 @media(prefers-reduced-motion:reduce){*{transition:none!important}}
+@media(max-width:480px){
+.tools{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px}
+.tools>.tb,.menuWrap>.tb{width:100%;min-height:44px;padding:10px 8px;display:flex;align-items:center;justify-content:center;gap:6px;text-align:center;white-space:nowrap}
+.menuWrap{grid-column:1/-1}
+.top{margin-bottom:4px}
+}
 .tools{position:relative}.menuWrap{position:static}
 .grip{color:#8A887D}
 .warn{background:#FBF1E3;border:1px solid #E6CFA5;color:#6B4E16;border-radius:10px;padding:9px 12px;font-size:13px;margin:0 0 10px}
@@ -80,7 +86,10 @@ form h2{font-family:var(--serif);font-weight:400;font-size:22px;margin:0 0 12px}
 .mbox{background:#FAF9F5;border-radius:16px;padding:14px;max-width:460px;width:100%;max-height:100%;display:flex;flex-direction:column;gap:10px}
 .mbox p{margin:0;font-size:13px;color:var(--mute)}
 .mbox img{align-self:center;max-width:100%;max-height:calc(100vh - 190px);border-radius:10px;border:1px solid var(--line)}
-.mact{display:flex;gap:8px;justify-content:flex-end}
+.mact{display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap}
+.ib{display:inline-flex;align-items:center;gap:7px}
+.ib svg{flex:none}
+.tb.ib{padding:9px 14px}
 @media(max-width:480px){select,input[type=text],input[type=number]{font-size:16px}}
 </style>
 </head>
@@ -127,8 +136,8 @@ form h2{font-family:var(--serif);font-weight:400;font-size:22px;margin:0 0 12px}
 </main>
 <div class="toast" id="toast" hidden role="status"></div>
 <div class="modal" id="modal" hidden role="dialog" aria-modal="true" aria-label="JPG export preview">
- <div class="mbox"><p id="mhint">On your phone: touch and hold the image, then choose Save to Photos. Or tap Share / Save.</p>
- <img id="mimg" alt="Your day as an image"><div class="mact"><button class="add" id="mshare" type="button">Share / Save</button><button class="tb" id="mclose" type="button">Close</button></div></div>
+ <div class="mbox"><p id="mhint">Tap Share to send it, or Download to save it. On a phone you can also touch and hold the image.</p>
+ <img id="mimg" alt="Your day as an image"><div class="mact"><button class="tb ib" id="mdl" type="button"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M4 20h16"/></svg>Download</button><button class="add ib" id="mshare" type="button"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 13.5 6.8 4M15.4 6.5l-6.8 4"/></svg>Share</button><button class="tb" id="mclose" type="button">Close</button></div></div>
 </div>
 
 <script>
@@ -316,9 +325,9 @@ function drawDay(D,title){
     a=b;y+=CH+GAP});
   if(left>0){g.setLineDash([12,10]);g.strokeStyle="#D3D0C3";g.lineWidth=2;rr(g,P,y,IW,CH,22);g.stroke();g.setLineDash([]);
     g.fillStyle=MUTE;g.font="400 28px "+SAN;g.fillText("Open time",P+48,y+68);g.textAlign="right";g.fillText(fmtH(left),P+IW-36,y+68);g.textAlign="left"}
-  g.fillStyle=MUTE;g.font="400 22px "+SAN;g.textAlign="center";g.fillText("Planned with timecard.timeblocker.xyz",W/2,H-40);
+  g.fillStyle=MUTE;g.font="400 22px "+SAN;g.textAlign="center";g.fillText("Planned with timeblocker.xyz",W/2,H-40);
   return cv}
-var cur=null,HINT="On your phone: touch and hold the image, then choose Save to Photos. Or tap Share / Save.";
+var cur=null,HINT="Tap Share to send it, or Download to save it. On a phone you can also touch and hold the image.";
 function exportJPG(D,title){
   var go=function(){var cv=drawDay(D,title);cur={cv:cv,title:title};$("mimg").src=cv.toDataURL("image/jpeg",.92);$("mhint").textContent=HINT;$("modal").hidden=false;$("mclose").focus()};
   var f=document.fonts&&document.fonts.load?Promise.all([document.fonts.load("400 76px Newsreader"),document.fonts.load("500 40px Newsreader"),document.fonts.load("500 30px Inter"),document.fonts.load("400 26px Inter")]):Promise.resolve();
@@ -326,18 +335,26 @@ function exportJPG(D,title){
 $("expBtn").onclick=function(){exportJPG(S,"My 24 hours")};
 $("mclose").onclick=function(){$("modal").hidden=true};
 $("modal").addEventListener("click",function(e){if(e.target===this)this.hidden=true});
-$("mshare").onclick=async function(){
-  if(!cur)return;var say=function(t){$("mhint").textContent=t};
+function say(t){$("mhint").textContent=t}
+async function getFile(){
+  if(!cur)return null;
   var fn=((cur.title||"my-24-hours").replace(/[^\w\- ]+/g,"").trim().replace(/\s+/g," ").replace(/ /g,"-").toLowerCase()||"my-24-hours")+".jpg";
   var blob=await new Promise(function(r){cur.cv.toBlob(r,"image/jpeg",.92)});
-  if(!blob){say("Couldn't create the image. Touch and hold the picture above to save it.");return}
+  return blob?{blob:blob,fn:fn}:null}
+$("mdl").onclick=async function(){
+  var o=await getFile();
+  if(!o){say("Couldn't create the image. Touch and hold the picture above to save it.");return}
   try{var dl=window.claude&&claude.use?await claude.use("downloads"):null;
-    if(dl){await dl.save({filename:fn,data:blob});say("Saved. Look in your Photos or Downloads.");return}}
-  catch(e){if(e&&e.code==="declined"){say("Not saved. Tap Share / Save to try again.");return}}
-  try{var f=new File([blob],fn,{type:"image/jpeg"});
+    if(dl){await dl.save({filename:o.fn,data:o.blob});say("Downloaded. Look in your Photos or Downloads.");return}}
+  catch(e){if(e&&e.code==="declined"){say("Not saved. Tap Download to try again.");return}}
+  say("Couldn't download automatically. Touch and hold the image above, then choose Save to Photos.")};
+$("mshare").onclick=async function(){
+  var o=await getFile();
+  if(!o){say("Couldn't create the image. Touch and hold the picture above to save it.");return}
+  try{var f=new File([o.blob],o.fn,{type:"image/jpeg"});
     if(navigator.canShare&&navigator.canShare({files:[f]})){await navigator.share({files:[f],title:"My 24 hours"});return}}
   catch(e){if(e&&e.name==="AbortError")return}
-  say("Couldn't save automatically. Touch and hold the image above, then choose Save to Photos.")};
+  say("Sharing isn't available here. Tap Download instead, or touch and hold the image.")};
 render();
 })();
 </script>
