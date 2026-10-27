@@ -90,6 +90,8 @@ form h2{font-family:var(--serif);font-weight:400;font-size:22px;margin:0 0 12px}
 .ib{display:inline-flex;align-items:center;gap:7px}
 .ib svg{flex:none}
 .tb.ib{padding:9px 14px}
+*{-webkit-tap-highlight-color:transparent}
+button,select{-webkit-touch-callout:none;user-select:none;-webkit-user-select:none}
 @media(max-width:480px){select,input[type=text],input[type=number]{font-size:16px}}
 </style>
 </head>
@@ -347,6 +349,10 @@ $("mdl").onclick=async function(){
   try{var dl=window.claude&&claude.use?await claude.use("downloads"):null;
     if(dl){await dl.save({filename:o.fn,data:o.blob});say("Downloaded. Look in your Photos or Downloads.");return}}
   catch(e){if(e&&e.code==="declined"){say("Not saved. Tap Download to try again.");return}}
+  try{var u=URL.createObjectURL(o.blob),a=document.createElement("a");a.href=u;a.download=o.fn;a.style.display="none";document.body.appendChild(a);a.click();
+    setTimeout(function(){a.remove();URL.revokeObjectURL(u)},4000);
+    say("Download started. If nothing happened, touch and hold the image above and choose Save to Photos.");return}
+  catch(e){}
   say("Couldn't download automatically. Touch and hold the image above, then choose Save to Photos.")};
 $("mshare").onclick=async function(){
   var o=await getFile();
