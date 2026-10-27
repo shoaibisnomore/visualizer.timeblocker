@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>My 24 hours</title>
+<title>Time Card 24 Hours</title>
 <link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 :root{--bg:#FAF9F5;--card:#fff;--line:#E8E6DC;--ink:#141413;--mute:#6F6E68;--accent:#141413;
@@ -316,7 +316,7 @@ function drawDay(D,title){
     a=b;y+=CH+GAP});
   if(left>0){g.setLineDash([12,10]);g.strokeStyle="#D3D0C3";g.lineWidth=2;rr(g,P,y,IW,CH,22);g.stroke();g.setLineDash([]);
     g.fillStyle=MUTE;g.font="400 28px "+SAN;g.fillText("Open time",P+48,y+68);g.textAlign="right";g.fillText(fmtH(left),P+IW-36,y+68);g.textAlign="left"}
-  g.fillStyle=MUTE;g.font="400 22px "+SAN;g.textAlign="center";g.fillText("Planned with My 24 hours",W/2,H-40);
+  g.fillStyle=MUTE;g.font="400 22px "+SAN;g.textAlign="center";g.fillText("Planned with timecard.timeblocker.xyz",W/2,H-40);
   return cv}
 var cur=null,HINT="On your phone: touch and hold the image, then choose Save to Photos. Or tap Share / Save.";
 function exportJPG(D,title){
